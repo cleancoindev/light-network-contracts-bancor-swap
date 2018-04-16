@@ -12,7 +12,6 @@
     "ethereumjs-util": "^5.1.5",
     "zeppelin-solidity": "^1.8.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,7 +1,7 @@
 pragma solidity ^0.4.21;
 
 import 'zeppelin-solidity/contracts/ownership/Claimable.sol';
-import 'zeppelin-solidity/contracts/token/ERC20/ERC20.sol';
+import './interfaces/IERC20Token.sol';
 import './MainInterface.sol';
 
 /*
@@ -17,8 +17,9 @@ contract UserWallet is Claimable {
         address signerOne;
         address signerTwo;
         address tokenAddress;
-        address receivingAddress;
+        address tokenBAddress;
         address destinationAddress;
+        address receiverAddress;
 
         uint8 signerOneV;
         uint8 signerTwoV;
@@ -45,7 +46,7 @@ contract UserWallet is Claimable {
     (
         uint8[2] v,
         bytes32[4] rs,
-        address[5] addresses,
+        address[6] addresses,
         uint256[3] misc
     )
     external
@@ -54,8 +55,10 @@ contract UserWallet is Claimable {
             signerOne: addresses[0],
             signerTwo: addresses[1],
             tokenAddress: addresses[2],
-            receivingAddress: addresses[3],
+            tokenBAddress: addresses[3],
             destinationAddress: addresses[4],
+            receiverAddress: addresses[5],
+
 
 
             signerOneV: v[0],
@@ -72,8 +75,9 @@ contract UserWallet is Claimable {
 
         bytes32 delegatedHash = keccak256(
             delegation.tokenAddress,
-            delegation.receivingAddress,
+            delegation.tokenBAddress,
             delegation.destinationAddress,
+            delegation.receiverAddress,
             delegation.amount,
             delegation.signerOneNonce
         );
@@ -83,20 +87,20 @@ contract UserWallet is Claimable {
         delegations[delegatedHash] = true;
 
         //ensure enough tokens are already in this contract
-        ERC20 token = ERC20(delegation.tokenAddress);
+        IERC20Token token = IERC20Token(delegation.tokenAddress);
         require(token.balanceOf(address(this)) >= delegation.amount);
 
         //TODO signature checks
+        //TODO events
 
 
         //approve sending the token
         token.approve(delegation.destinationAddress, delegation.amount);
         MainInterface main = MainInterface(delegation.destinationAddress);
-        require(main.transferToken(
-            [delegation.tokenAddress, address(this), delegation.receivingAddress],
-            delegation.amount,
-            msg.sender
-        ));
+        main.transferToken(
+            [delegation.tokenAddress, delegation.tokenBAddress, address(this), msg.sender, delegation.receiverAddress],
+            delegation.amount
+        );
     }
 
 }
