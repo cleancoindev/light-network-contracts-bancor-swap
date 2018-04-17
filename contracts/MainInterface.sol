@@ -2,7 +2,14 @@ pragma solidity ^0.4.21;
 
 contract MainInterface {
     function transferToken(
-        address[5] addresses,
+        address[] path,
+        address receiver,
+        address executor,
         uint256 amount
-    ) returns (bool);
+    )
+    public
+    returns
+    (
+        bool
+    );
 }

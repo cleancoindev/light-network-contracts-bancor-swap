@@ -16,10 +16,10 @@ contract UserWallet is Claimable {
     struct Delegation {
         address signerOne;
         address signerTwo;
-        address tokenAddress;
-        address tokenBAddress;
         address destinationAddress;
         address receiverAddress;
+
+        address[] path;
 
         uint8 signerOneV;
         uint8 signerTwoV;
@@ -46,20 +46,19 @@ contract UserWallet is Claimable {
     (
         uint8[2] v,
         bytes32[4] rs,
-        address[6] addresses,
-        uint256[3] misc
+        address[4] addresses,
+        uint256[3] misc,
+        address[] path
     )
     external
     {
         Delegation memory delegation = Delegation({
             signerOne: addresses[0],
             signerTwo: addresses[1],
-            tokenAddress: addresses[2],
-            tokenBAddress: addresses[3],
-            destinationAddress: addresses[4],
-            receiverAddress: addresses[5],
+            destinationAddress: addresses[2], //address that will execute the trade
+            receiverAddress: addresses[3], //address that will receive the resulting tokens
 
-
+            path: path,
 
             signerOneV: v[0],
             signerTwoV: v[1],
@@ -74,8 +73,7 @@ contract UserWallet is Claimable {
         });
 
         bytes32 delegatedHash = keccak256(
-            delegation.tokenAddress,
-            delegation.tokenBAddress,
+            delegation.path,
             delegation.destinationAddress,
             delegation.receiverAddress,
             delegation.amount,
@@ -86,19 +84,17 @@ contract UserWallet is Claimable {
         require(!delegations[delegatedHash]);
         delegations[delegatedHash] = true;
 
-        //ensure enough tokens are already in this contract
-        IERC20Token token = IERC20Token(delegation.tokenAddress);
-        require(token.balanceOf(address(this)) >= delegation.amount);
-
         //TODO signature checks
         //TODO events
 
 
         //approve sending the token
-        token.approve(delegation.destinationAddress, delegation.amount);
+        IERC20Token(delegation.path[0]).approve(delegation.destinationAddress, delegation.amount);
         MainInterface main = MainInterface(delegation.destinationAddress);
         main.transferToken(
-            [delegation.tokenAddress, delegation.tokenBAddress, address(this), msg.sender, delegation.receiverAddress],
+            delegation.path,
+            delegation.receiverAddress,
+            msg.sender,
             delegation.amount
         );
     }
