@@ -91,7 +91,7 @@ contract UserWallet is Claimable {
 
 
         //approve sending the token
-        IERC20Token(delegation.path[0]).approve(delegation.destinationAddress, delegation.amount);
+        IERC20Token(path[0]).approve(delegation.destinationAddress, delegation.amount);
         MainInterface main = MainInterface(delegation.destinationAddress);
         main.transferToken(
             delegation.path,
