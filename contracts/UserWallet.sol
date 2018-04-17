@@ -42,6 +42,8 @@ contract UserWallet is Claimable {
         signers = _signers;
     }
 
+    //TODO: function to withdraw a token
+
     function delegate
     (
         uint8[2] v,
