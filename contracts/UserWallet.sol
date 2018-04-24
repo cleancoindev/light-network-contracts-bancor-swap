@@ -83,7 +83,7 @@ contract UserWallet is Claimable {
         );
 
         //ensure delegation has not happened yet
-        require(!delegations[delegatedHash]);
+        require(!delegations[delegatedHash], "order has already been filled");
         delegations[delegatedHash] = true;
 
         //TODO signature checks
@@ -91,14 +91,15 @@ contract UserWallet is Claimable {
 
 
         //approve sending the token
-        IERC20Token(path[0]).approve(delegation.destinationAddress, delegation.amount);
+        require(IERC20Token(path[0]).approve(delegation.destinationAddress, delegation.amount),
+            "failed to approve path[0] token to destination address");
         MainInterface main = MainInterface(delegation.destinationAddress);
-        main.transferToken(
+        require(main.transferToken(
             delegation.path,
             delegation.receiverAddress,
             msg.sender,
-            delegation.amount
-        );
+            delegation.amount),
+        "failed to delegate token transfer to destinationAddress");
     }
 
 }
