@@ -8,7 +8,7 @@ module.exports = {
         },
         live: {
             host: '127.0.0.1',
-            post: 8545,
+            port: 8545,
             network_id: 1,
             gasPrice: 5000000000, //5gwei
             gas: 450000,
