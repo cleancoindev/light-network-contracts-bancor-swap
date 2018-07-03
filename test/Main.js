@@ -21,8 +21,6 @@ const BancorConverter = artifacts.require('BancorConverter.sol');
 const CrowdsaleController = artifacts.require('CrowdsaleController.sol');
 
 const TestERC20Token = artifacts.require('TestERC20Token.sol');
-const utils = require('./helpers/Utils');
-
 
 contract('Light', async function ([owner, userOne, userTwo, userThree]) {
 
