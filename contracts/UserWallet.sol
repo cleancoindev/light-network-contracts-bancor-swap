@@ -75,7 +75,9 @@ contract UserWallet is Claimable {
         });
 
         bytes32 delegatedHash = keccak256(
-//            delegation.path,
+            delegation.path[0],
+            delegation.path[1],
+            delegation.path[2],
             delegation.destinationAddress,
             delegation.receiverAddress,
             delegation.amount,

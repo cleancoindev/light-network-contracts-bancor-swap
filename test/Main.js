@@ -64,9 +64,13 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
 
         await connectorToken.transfer(wallet.address, 10, {from: owner});
         const delegationHash = `0x${ABI.soliditySHA3([
-                'address', 'address', 'uint', 'uint'
+                'address', 'address', 'address', 'address', 'address', 'uint', 'uint'
             ],
-            [   new BN(main.address.replace('0x', ''), 16),
+            [
+                new BN(connectorToken.address.replace('0x', ''), 16),
+                new BN(token.address.replace('0x', ''), 16),
+                new BN(connectorToken2.address.replace('0x', ''), 16),
+                new BN(main.address.replace('0x', ''), 16),
                 new BN(userTwo.replace('0x', ''), 16),
                 5,
                 0
