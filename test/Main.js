@@ -89,37 +89,6 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
         const userTwoR = `0x${userTwoRaw.r.toString('hex')}`, userTwoS = `0x${userTwoRaw.s.toString('hex')}`,
             userTwoV = userTwoRaw.v;
 
-        /*
-            Structure of the delegation
-
-            Delegation memory delegation = Delegation({
-            signerOne: addresses[0],
-            signerTwo: addresses[1],
-            destinationAddress: addresses[2], //address that will execute the trade
-            receiverAddress: addresses[3], //address that will receive the resulting tokens
-
-            path: path,
-
-            signerOneV: v[0],
-            signerTwoV: v[1],
-            signerOneNonce: misc[0],
-            signerTwoNonce: misc[1],
-            amount: misc[2],
-
-            signerOneR: rs[0],
-            sigerTwoR: rs[1],
-            signerOneS: rs[2],
-            signerTwoS: rs[3]
-        });
-
-        bytes32 delegatedHash = keccak256(
-            delegation.path,
-            delegation.destinationAddress,
-            delegation.receiverAddress,
-            delegation.amount,
-            delegation.signerOneNonce
-        );
-         */
         await wallet.delegate(
             [userOneV, userTwoV],
             [userOneR, userTwoR, userOneS, userTwoS],

@@ -18,7 +18,7 @@ contract UserWallet is Claimable {
         address signerTwo;
         address destinationAddress;
         address receiverAddress;
-        
+
         uint8 signerOneV;
         uint8 signerTwoV;
         uint256 signerOneNonce;
@@ -26,7 +26,7 @@ contract UserWallet is Claimable {
         uint256 amount;
 
         bytes32 signerOneR;
-        bytes32 sigerTwoR;
+        bytes32 signerTwoR;
         bytes32 signerOneS;
         bytes32 signerTwoS;
     }
@@ -65,12 +65,12 @@ contract UserWallet is Claimable {
             amount: misc[2],
 
             signerOneR: rs[0],
-            sigerTwoR: rs[1],
+            signerTwoR: rs[1],
             signerOneS: rs[2],
             signerTwoS: rs[3]
         });
 
-        bytes32 delegatedHash = keccak256(
+        bytes32 delegatedHashOne = keccak256(
             path[0],
             path[1],
             path[2],
@@ -81,16 +81,26 @@ contract UserWallet is Claimable {
         );
 
         //ensure delegation has not happened yet
-        require(!delegations[delegatedHash], "order has already been filled");
-        delegations[delegatedHash] = true;
+        require(!delegations[delegatedHashOne], "signer one: order filled");
+        delegations[delegatedHashOne] = true;
 
-        //TODO signature checks
         bytes memory prefix = "\x19Ethereum Signed Message:\n32";
-        bytes32 prefixedHash = keccak256(prefix, delegatedHash);
+        bytes32 prefixedHash = keccak256(prefix, delegatedHashOne);
         require(ecrecover(prefixedHash, delegation.signerOneV, delegation.signerOneR, delegation.signerOneS) ==
             address(delegation.signerOne), "Failed to verify userOne signature");
-        //TODO events
 
+        bytes32 delegatedHashTwo = keccak256(
+            delegatedHashOne,
+            delegation.signerTwoNonce
+        );
+
+        //ensure delegation has not happened yet
+        require(!delegations[delegatedHashTwo], "signer two: order filled");
+        delegations[delegatedHashTwo] = true;
+
+        bytes32 prefixedHashTwo = keccak256(prefix, delegatedHashTwo);
+        require(ecrecover(prefixedHashTwo, delegation.signerTwoV, delegation.signerTwoR, delegation.signerTwoS) ==
+            address(delegation.signerTwo), "Failed to verify userTwo signature");
 
         //approve sending the token
         require(IERC20Token(path[0]).approve(delegation.destinationAddress, delegation.amount),

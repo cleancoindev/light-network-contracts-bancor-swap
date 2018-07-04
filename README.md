@@ -11,4 +11,4 @@ The main point is that you can swap tokens without holding ethereum.
 
 ## Testing
 
-Run `npm test` with ganache on port 7545 (configurable in truffle.js)
+Run `npm install && npm test` with ganache on port 7545 (configurable in truffle.js)
