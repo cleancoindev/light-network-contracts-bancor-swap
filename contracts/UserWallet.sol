@@ -18,9 +18,7 @@ contract UserWallet is Claimable {
         address signerTwo;
         address destinationAddress;
         address receiverAddress;
-
-        address[] path;
-
+        
         uint8 signerOneV;
         uint8 signerTwoV;
         uint256 signerOneNonce;
@@ -50,7 +48,7 @@ contract UserWallet is Claimable {
         bytes32[4] rs,
         address[4] addresses,
         uint256[3] misc,
-        address[] path
+        address[3] path
     )
     external
     {
@@ -59,8 +57,6 @@ contract UserWallet is Claimable {
             signerTwo: addresses[1],
             destinationAddress: addresses[2], //address that will execute the trade
             receiverAddress: addresses[3], //address that will receive the resulting tokens
-
-            path: path,
 
             signerOneV: v[0],
             signerTwoV: v[1],
@@ -75,9 +71,9 @@ contract UserWallet is Claimable {
         });
 
         bytes32 delegatedHash = keccak256(
-            delegation.path[0],
-            delegation.path[1],
-            delegation.path[2],
+            path[0],
+            path[1],
+            path[2],
             delegation.destinationAddress,
             delegation.receiverAddress,
             delegation.amount,
@@ -101,7 +97,7 @@ contract UserWallet is Claimable {
             "failed to approve path[0] token to destination address");
         MainInterface main = MainInterface(delegation.destinationAddress);
         require(main.transferToken(
-            delegation.path,
+            path,
             delegation.receiverAddress,
             msg.sender,
             delegation.amount),

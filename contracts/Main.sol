@@ -125,7 +125,7 @@ contract Main is Claimable {
     }
 
     function transferToken(
-        address[] path,
+        address[3] path,
         address receiverAddress,
         address executor,
         uint256 amount
