@@ -75,7 +75,7 @@ contract UserWallet is Claimable {
         });
 
         bytes32 delegatedHash = keccak256(
-            delegation.path,
+//            delegation.path,
             delegation.destinationAddress,
             delegation.receiverAddress,
             delegation.amount,
@@ -87,6 +87,10 @@ contract UserWallet is Claimable {
         delegations[delegatedHash] = true;
 
         //TODO signature checks
+        bytes memory prefix = "\x19Ethereum Signed Message:\n32";
+        bytes32 prefixedHash = keccak256(prefix, delegatedHash);
+        require(ecrecover(prefixedHash, delegation.signerOneV, delegation.signerOneR, delegation.signerOneS) ==
+            address(delegation.signerOne), "Failed to verify userOne signature");
         //TODO events
 
 

@@ -136,9 +136,6 @@ contract Main is Claimable {
         bool
     )
     {
-        //TODO: require
-        //TODO: events
-
         IERC20Token[] memory pathConverted = new IERC20Token[](path.length);
 
         for (uint i = 0; i < path.length; i++) {
