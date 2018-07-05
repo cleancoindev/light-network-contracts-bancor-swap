@@ -113,5 +113,4 @@ contract UserWallet is Claimable {
             delegation.amount),
         "failed to delegate token transfer to destinationAddress");
     }
-
 }

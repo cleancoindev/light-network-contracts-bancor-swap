@@ -30,9 +30,6 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
     let connectorToken2;
     let converter, converter2;
     let quickConverter;
-    let smartToken2;
-    let smartToken3;
-    let smartToken4;
 
     const gasPrice = 22000000000;
 
