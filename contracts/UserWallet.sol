@@ -4,8 +4,10 @@ import 'zeppelin-solidity/contracts/ownership/Claimable.sol';
 import './interfaces/IERC20Token.sol';
 import './MainInterface.sol';
 
-/*
-    Allows for tokens to be transferred
+/**
+    A multi-sig wallet that allows for tokens to be swapped using Bancor
+    Additionally, token swaps can be delegated to an external third party
+    This allows the contract to only hold tokens and for gas costs to be paid with tokens
 */
 
 contract UserWallet is Claimable {
@@ -42,6 +44,15 @@ contract UserWallet is Claimable {
 
     //TODO: function to withdraw a token
 
+    /**
+        Delegators can call this function to initiate a token swap or a token transfer
+        v: Digital signature param
+        rs: Digital signature param
+        addresses: Destination address, receiver, signers
+        misc: Nonces and amount
+        path: Quick convert path followed by the Bancor Protocol
+    */
+
     function delegate
     (
         uint8[2] v,
@@ -50,8 +61,9 @@ contract UserWallet is Claimable {
         uint256[3] misc,
         address[3] path
     )
-    external
+    public
     {
+
         Delegation memory delegation = Delegation({
             signerOne: addresses[0],
             signerTwo: addresses[1],

@@ -28,10 +28,14 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
     let token;
     let connectorToken;
     let connectorToken2;
-    let converter, converter2;
+    let converter;
     let quickConverter;
 
     const gasPrice = 22000000000;
+
+    /**
+     * Setup Bancor quick converter between two ERC20 and a smart token
+     */
 
     beforeEach(async () => {
         token = await SmartToken.new('Token1', 'TKN1', 2);
@@ -57,9 +61,19 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
         wallet = await UserWallet.new([userOne, userTwo, userThree]);
     });
 
+    /**
+     * Swap between ERC1 and ERC2 using Bancor
+     * Additionally, after swapping has occurred send ERC2 to User2 (from User1)
+     */
+
     it('Delegated token transfer', async () => {
 
         await connectorToken.transfer(wallet.address, 10, {from: owner});
+
+        /**
+         * User one performs a digital signature on the path, destination, receiver, amount, and nonce
+         */
+
         const delegationHash = `0x${ABI.soliditySHA3([
                 'address', 'address', 'address', 'address', 'address', 'uint', 'uint'
             ],
@@ -76,6 +90,10 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
         const userOneSig = await web3.eth.sign(userOne, delegationHash);
         const userOneRaw = util.fromRpcSig(userOneSig);
 
+        /**
+         * User two performs a digital signature on the hash and their nonce
+         */
+
         const userTwoHash = `0x${ABI.soliditySHA3(['bytes32', 'uint'],
             [delegationHash, 0]).toString('hex')}`;
         const userTwoSig = await web3.eth.sign(userTwo, userTwoHash);
@@ -86,6 +104,11 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
         const userTwoR = `0x${userTwoRaw.r.toString('hex')}`, userTwoS = `0x${userTwoRaw.s.toString('hex')}`,
             userTwoV = userTwoRaw.v;
 
+        /**
+         * Anyone can call delegate so long as they pass in both signatures and the original data that was hashed
+         * This allows for a UserWallet to hold only tokens and for gas costs to be delegated to a third party
+         */
+
         await wallet.delegate(
             [userOneV, userTwoV],
             [userOneR, userTwoR, userOneS, userTwoS],
@@ -94,5 +117,11 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
             [connectorToken.address, token.address, connectorToken2.address],
             {gasPrice: 1}
         );
+
+        /**
+         * Verify that tokens
+         */
+
+
     });
 });

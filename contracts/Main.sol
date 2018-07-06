@@ -115,6 +115,9 @@ contract Bancor {
 
 }
 
+/**
+    Interfaces with Bancor's quick convert functionality to quickly swap tokens according to a predefined path
+*/
 
 contract Main is Claimable {
 
@@ -123,6 +126,13 @@ contract Main is Claimable {
     function Main(address _bancor) public {
         bancor = Bancor(_bancor);
     }
+
+    /**
+        path: The quick convert path that the Bancor protocol follows to convert a token
+        receiverAddress: Who will receive the tokens after they have been swapped
+        executor: The user who will take a cut of the tokens after (or before) they have been swapped. TODO
+        amount: The amount being swapped
+    */
 
     function transferToken(
         address[3] path,
