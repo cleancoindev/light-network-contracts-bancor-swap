@@ -118,10 +118,5 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
             {gasPrice: 1}
         );
 
-        /**
-         * Verify that tokens
-         */
-
-
     });
 });
