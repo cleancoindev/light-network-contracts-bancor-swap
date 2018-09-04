@@ -1,6 +1,5 @@
 pragma solidity ^0.4.21;
 
-import 'zeppelin-solidity/contracts/ownership/Claimable.sol';
 import './interfaces/IERC20Token.sol';
 import './MainInterface.sol';
 
@@ -10,7 +9,7 @@ import './MainInterface.sol';
     This allows the contract to only hold tokens and for gas costs to be paid with tokens
 */
 
-contract UserWallet is Claimable {
+contract UserWallet {
 
     address[] public signers;
     mapping(bytes32 => bool) delegations;
