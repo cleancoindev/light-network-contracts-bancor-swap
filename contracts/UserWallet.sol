@@ -42,8 +42,6 @@ contract UserWallet is Claimable {
         signers = _signers;
     }
 
-    //TODO: function to withdraw a token
-
     /**
         Delegators can call this function to initiate a token swap or a token transfer
         v: Digital signature param

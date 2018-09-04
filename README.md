@@ -11,8 +11,4 @@ The main point is that you can swap tokens without holding ethereum.
 
 ## Testing
 
-Run `npm install && npm test` with ganache on port 7545 (configurable in truffle.js)
-
-## Improvements
-
-Modify user wallet to use a proxy delegate pattern to allow for more flexibility.
+Run `npm install && npm start`

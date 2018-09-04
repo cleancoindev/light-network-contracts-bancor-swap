@@ -3,22 +3,13 @@ const BN = require('bn.js');
 const util = require('ethereumjs-util');
 const Main = artifacts.require('./Main.sol');
 const UserWallet = artifacts.require('./UserWallet.sol');
-const Token = artifacts.require('./Token.sol');
 
-const Utils = artifacts.require('Utils.sol');
-const Owned = artifacts.require('Owned.sol');
-const Managed = artifacts.require('Managed.sol');
-const TokenHolder = artifacts.require('TokenHolder.sol');
-const ERC20Token = artifacts.require('ERC20Token.sol');
-const EtherToken = artifacts.require('EtherToken.sol');
 const SmartToken = artifacts.require('SmartToken.sol');
-const SmartTokenController = artifacts.require('SmartTokenController.sol');
 const BancorFormula = artifacts.require('BancorFormula.sol');
 const BancorGasPriceLimit = artifacts.require('BancorGasPriceLimit.sol');
 const BancorQuickConverter = artifacts.require('BancorQuickConverter.sol');
 const BancorConverterExtensions = artifacts.require('BancorConverterExtensions.sol');
 const BancorConverter = artifacts.require('BancorConverter.sol');
-const CrowdsaleController = artifacts.require('CrowdsaleController.sol');
 
 const TestERC20Token = artifacts.require('TestERC20Token.sol');
 
