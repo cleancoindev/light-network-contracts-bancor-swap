@@ -2,7 +2,7 @@
 
 ## Overview
 
-Light Network is a multi-signature wallet available on both android and IOS (built in react-native ) that allows you to store tokens, swap them, and send them without the need to hold ethereum in the wallet.
+Light Network is a multi-signature wallet available on both android and IOS (built on react-native) that allows you to store tokens, swap them, and send them without the need to hold ethereum in the wallet.
 In essence, you can "hodl" some tokens in a smart contract and then digitally sign messages to delegate the execution of the smart contract to another party (ERC 865).
 
 When the contract is executed, it will optionally perform a swap for you using Bancor.
@@ -141,3 +141,6 @@ await wallet.delegate(
 );
 
 ```
+
+## Improvements
+[ ] Use delegatecall in UserWallet for upgradeability 
