@@ -78,7 +78,7 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
                 0
             ])
             .toString('hex')}`;
-        const userOneSig = await web3.eth.sign(userOne, delegationHash);
+        const userOneSig = await web3.eth.sign(delegationHash, userOne);
         const userOneRaw = util.fromRpcSig(userOneSig);
 
         /**
@@ -86,8 +86,8 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
          */
 
         const userTwoHash = `0x${ABI.soliditySHA3(['bytes32', 'uint'],
-            [delegationHash, 0]).toString('hex')}`;
-        const userTwoSig = await web3.eth.sign(userTwo, userTwoHash);
+            [new Buffer(delegationHash.replace('0x', ''), "hex"), 0]).toString('hex')}`;
+        const userTwoSig = await web3.eth.sign(userTwoHash, userTwo);
         const userTwoRaw = util.fromRpcSig(userTwoSig);
 
         const userOneR = `0x${userOneRaw.r.toString('hex')}`, userOneS = `0x${userOneRaw.s.toString('hex')}`,
