@@ -1,6 +1,6 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.24;
 
-contract MainInterface {
+contract BancorProxyI {
     function transferToken(
         address[3] path,
         address receiverAddress,

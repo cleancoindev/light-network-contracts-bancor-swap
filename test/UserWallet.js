@@ -1,7 +1,7 @@
 const ABI = require('ethereumjs-abi');
 const BN = require('bn.js');
 const util = require('ethereumjs-util');
-const Main = artifacts.require('./Main.sol');
+const BancorProxy = artifacts.require('./BancorProxy.sol');
 const UserWallet = artifacts.require('./UserWallet.sol');
 
 const SmartToken = artifacts.require('SmartToken.sol');
@@ -15,7 +15,7 @@ const TestERC20Token = artifacts.require('TestERC20Token.sol');
 
 contract('Light', async function ([owner, userOne, userTwo, userThree]) {
 
-    let main, wallet;
+    let bancorProxy, wallet;
     let token;
     let connectorToken;
     let connectorToken2;
@@ -48,7 +48,7 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
         await connectorToken.transfer(converter.address, 5000);
         await connectorToken2.transfer(converter.address, 15000);
 
-        main = await Main.new(converter.address);
+        bancorProxy = await BancorProxy.new(converter.address);
         wallet = await UserWallet.new([userOne, userTwo, userThree]);
     });
 
@@ -72,7 +72,7 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
                 new BN(connectorToken.address.replace('0x', ''), 16),
                 new BN(token.address.replace('0x', ''), 16),
                 new BN(connectorToken2.address.replace('0x', ''), 16),
-                new BN(main.address.replace('0x', ''), 16),
+                new BN(bancorProxy.address.replace('0x', ''), 16),
                 new BN(userTwo.replace('0x', ''), 16),
                 5,
                 0
@@ -103,7 +103,7 @@ contract('Light', async function ([owner, userOne, userTwo, userThree]) {
         await wallet.delegate(
             [userOneV, userTwoV],
             [userOneR, userTwoR, userOneS, userTwoS],
-            [userOne, userTwo, main.address, userTwo],
+            [userOne, userTwo, bancorProxy.address, userTwo],
             [0, 0, 5],
             [connectorToken.address, token.address, connectorToken2.address],
             {gasPrice: 1}

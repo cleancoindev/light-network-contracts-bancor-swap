@@ -1,7 +1,7 @@
 pragma solidity ^0.4.21;
 
 import './interfaces/IERC20Token.sol';
-import './MainInterface.sol';
+import "./interfaces/IBancorProxy.sol";
 
 /**
     A multi-sig wallet that allows for tokens to be swapped using Bancor
@@ -114,8 +114,8 @@ contract UserWallet {
         //approve sending the token
         require(IERC20Token(path[0]).approve(delegation.destinationAddress, delegation.amount),
             "failed to approve path[0] token to destination address");
-        MainInterface main = MainInterface(delegation.destinationAddress);
-        require(main.transferToken(
+        BancorProxyI bancorProxy = BancorProxyI(delegation.destinationAddress);
+        require(bancorProxy.transferToken(
             path,
             delegation.receiverAddress,
             msg.sender,
